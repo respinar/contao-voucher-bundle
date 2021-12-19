@@ -1,0 +1,53 @@
+{
+    "name": "respinar/contao-voucher-bundle",
+    "description": "Voucher manager",
+    "keywords": [
+        "contao",
+        "bundle",
+        "tag 3",
+        "tag 4"
+    ],
+    "type": "contao-bundle",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Hamid Abbaszadeh",
+            "email": "abbaszadeh.h@gmail.com",
+            "homepage": "https://respinar.com/",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/respinar/contao-voucher-bundle/issues",
+        "source": "https://github.com/respinar/contao-voucher-bundle"
+    },
+    "require": {
+        "contao/core-bundle": "^4.9"
+    },
+    "require-dev": {
+        "contao/manager-plugin": "^2.3",
+        "contao/test-case": "^4.0",
+        "phpunit/phpunit": "^8.4",
+        "symfony/http-client": "4.4.*",
+        "symfony/phpunit-bridge": "4.4.*",
+        "contao/easy-coding-standard": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Respinar\\ContaoVoucherBundle\\": "src/"
+        },
+        "classmap": [
+            "src/Resources/contao"
+        ],
+        "exclude-from-classmap": [
+            "src/Resources/contao/config",
+            "src/Resources/contao/dca",
+            "src/Resources/contao/languages",
+            "src/Resources/contao/templates"
+        ]
+    },
+    "extra": {
+        "contao-manager-plugin": "Respinar\\ContaoVoucherBundle\\ContaoManager\\Plugin"
+    },
+    "version": "0.1.1"
+}
