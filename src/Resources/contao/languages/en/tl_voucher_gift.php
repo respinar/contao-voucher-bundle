@@ -30,10 +30,14 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['show'] = ["Datensatz mit ID: %s ansehen"
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_voucher_gift']['giftCredit'] = ["Gift Credit", "Wählen Sie aus."];
-$GLOBALS['TL_LANG']['tl_voucher_gift']['giftCode'] =   ["Gift Code", "Geben Sie die Werte ein"];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['cardID'] = ["Card", "Wählen Sie aus."];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['staffID'] = ["Staff", "Wählen Sie aus."];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['giftCredit'] = ["Credit", "Wählen Sie aus."];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['giftCode'] =   ["Code", "Geben Sie die Werte ein"];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['giftQty'] =   ["Qty", "Geben Sie die Werte ein"];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['giftType'] =   ["Type", "Geben Sie die Werte ein"];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['datetime'] = ["Time", "Hier können Sie die erweiterten Einstellungen aktivieren."];
-$GLOBALS['TL_LANG']['tl_voucher_gift']['acceptor'] = ["Acceptor", "Geben Sie einen Text ein"];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['acceptorID'] = ["Acceptor", "Geben Sie einen Text ein"];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['invoice'] = ["Invoice", "Wählen Sie aus."];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['status'] = ["Status", "Geben Sie einen Text ein"];
 
@@ -43,7 +47,7 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['status'] = ["Status", "Geben Sie einen T
 $GLOBALS['TL_LANG']['tl_voucher_gift']['new'] = "New";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['send'] = "SMS sent";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['expired'] = "Expired";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['confrimed'] = "Confrimed";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['confrimed'] = "Used";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['duplicate'] = "Duplicate";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['invalid'] = "Invalid";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['error'] = "Error!";
