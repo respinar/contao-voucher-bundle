@@ -124,7 +124,7 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'maxlength' => 4, 'tl_class' => 'w50'),
+            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 4, 'tl_class' => 'w50'),
             'sql'       => "varchar(4) NOT NULL default ''"
         )
     )
@@ -149,4 +149,5 @@ class tl_voucher_acceptor extends Backend
 
         return $arrButtons;
     }
+
 }
