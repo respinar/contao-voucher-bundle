@@ -16,7 +16,21 @@ use Contao\Backend;
 use Contao\DC_Table;
 use Contao\Input;
 
+use Contao\BackendUser;
+use Contao\Config;
+use Contao\CoreBundle\Exception\AccessDeniedException;
+use Contao\CoreBundle\Security\ContaoCorePermissions;
+use Contao\DataContainer;
+use Contao\Date;
+use Contao\Image;
+use Contao\StringUtil;
+use Contao\System;
+use Contao\Versions;
+
 use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherStaffModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
 
 
 /**
@@ -33,6 +47,10 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
                 'id' => 'primary'
             )
         ),
+        'onsubmit_callback'       => array
+        (
+            array('tl_voucher_gift', 'adjustGift')
+        )
     ),
     'edit'        => array(
         'buttons_callback' => array(
@@ -41,15 +59,15 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
     ),
     'list'        => array(
         'sorting'         => array(
-            'mode'        => 1,            
+            'mode'        => 1,
             'fields'      => array('tstamp'),
             'flag'        => 12,
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields' => array('datetime','giftCode','giftCredit','acceptor','invoice','status'),
+            'fields' => array('cardID','giftCode','giftQty','staffID', 'acceptorID','invoice','datetime','status'),
             'showColumns'             => true,
-            'label_callback'          => array('tl_voucher_gift', 'acceptorTitle')
+            'label_callback'          => array('tl_voucher_gift', 'titles')
         ),
         'global_operations' => array(
             'all' => array(
@@ -86,7 +104,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{voucher_legend},giftCode,giftCredit;{confrim_legend},acceptor,invoice,datetime,status;{note_legend:hide},note'
+        'default'      => '{staff_legend},staffID,occasion;{voucher_legend},cardID,giftQty,giftCode,giftCredit;{confrim_legend},acceptorID,invoice,datetime,status;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -96,6 +114,50 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
         'tstamp'         => array(
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ),
+        'staffID'          => array(
+            'inputType' => 'select',
+            'foreignKey'=> 'tl_voucher_staff.name',            
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,            
+            'eval'      => array('chosen'=>true, 'mandatory'=>true, 'includeBlankOption'=>true,'multiple'=>false, 'submitOnChange'=>true, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_staff', 'titleField'=>'name', 'tl_class' => 'w50'),
+            'relation'  => array('type'=>'belongsTo', 'load'=>'lazy'),
+            'sql'       => "varchar(255) NULL default ''"
+        ),
+        'cardID'          => array(
+            'inputType' => 'select',
+            'foreignKey'=> 'tl_voucher_card.title',            
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,            
+            'eval'      => array('chosen'=>true, 'mandatory'=>true, 'includeBlankOption'=>true,'multiple'=>false, 'submitOnChange'=>true, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_card', 'titleField'=>'title', 'tl_class' => 'w50'),
+            'relation'  => array('type'=>'belongsTo', 'load'=>'lazy'),
+            'sql'       => "varchar(255) NULL default ''"
+        ),
+        'giftQty'  => array(
+            'inputType' => 'text',
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'eval'      => array('disabled'=>false,'mandatory' => false, 'maxlength' => 2, 'tl_class' => 'w50'),
+            'sql'       => "int(2) unsigned NOT NULL default 0"
+        ),   
+        'giftType'  => array(
+            'inputType' => 'text',
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'eval'      => array('disabled'=>false,'mandatory' => false, 'maxlength' => 20, 'tl_class' => 'w50'),
+            'sql'       => "varchar(20) NOT NULL default ''"
+        ),
         'giftCode'  => array(
             'inputType' => 'text',
             'exclude'   => true,
@@ -103,7 +165,8 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('disabled'=>true,'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'save_callback' => array('tl_voucher_gift','serialCodeCallback'),
+            'eval'      => array('disabled'=>true,'mandatory' => false, 'unique'=>true, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "varchar(20) NOT NULL default ''"
         ),        
         'giftCredit' => array(
@@ -113,7 +176,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('disabled'=>true,'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),    
         'datetime'          => array(
@@ -123,7 +186,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('disabled'=>true,'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'invoice'  => array(
@@ -133,10 +196,10 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('disabled'=>true,'mandatory' => true, 'maxlength' => 20, 'tl_class' => 'w50'),
+            'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 20, 'tl_class' => 'w50'),
             'sql'       => "varchar(20) NULL default ''"
         ),
-        'acceptor'          => array(
+        'acceptorID' => array(
             'inputType' => 'select',
             'foreignKey'=> 'tl_voucher_acceptor.title',            
             'exclude'   => true,
@@ -144,10 +207,20 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,            
-            'eval'      => array('disabled'=>true,'multiple'=>false, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_acceptor', 'titleField'=>'title', 'tl_class' => 'w50'),
+            'eval'      => array('disabled'=>true,'multiple'=>false, 'includeBlankOption'=>true, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_acceptor', 'titleField'=>'title', 'tl_class' => 'w50'),
             'relation'  => array('type'=>'belongsTo', 'load'=>'lazy'),
             'sql'       => "varchar(255) NULL default ''"
         ),           
+        'occasion' => array(
+            'inputType' => 'text',
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'eval'      => array('mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'sql'       => "varchar(255) NOT NULL default ''"
+        ),
         'note'  => array(
             'inputType' => 'textarea',
             'exclude'   => true,
@@ -163,7 +236,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
 			'inputType' => 'select',
             'reference' => $GLOBALS['TL_LANG']['tl_voucher_gift'],
             'options'   => array('new','sent','confrimed', 'duplicate','error','expired'),
-			'eval'      => array('disabled'=>false,'tl_class'=>'w50'),
+			'eval'      => array('disabled'=>true,'tl_class'=>'w50'),
 			'sql'       => "char(20) NOT NULL default ''"
 		),
     )
@@ -171,6 +244,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
 
 /**
  * Class tl_voucher_gift
+ * 
  */
 class tl_voucher_gift extends Backend
 {
@@ -190,6 +264,58 @@ class tl_voucher_gift extends Backend
     }
 
     /**
+     * Check status, if it is "answered", present a mail form
+     * 
+     * @param DataContainer $dc
+     */
+    public function adjustGift(DataContainer $dc)
+    {
+        // Return if there is no active record (override all)
+		if (!$dc->activeRecord)
+		{
+			return;
+		}
+
+        if ($dc->activeRecord->staffID)
+        {
+            $staffObj = VoucherStaffModel::findBy('id', $dc->activeRecord->staffID);
+            $arrSet['giftQty'] =  $staffObj->family_member_qty;
+        }
+
+        if ($dc->activeRecord->cardID) {
+            
+            $cardObj = VoucherCardModel::findBy('id',$dc->activeRecord->cardID);
+                    
+            $arrSet['giftCredit'] = $cardObj->credit;
+            $arrSet['giftType'] = $cardObj->type;
+
+            if ( !$dc->activeRecord->giftCode ) {
+
+                $success = false;
+                
+                while (!$success)
+                {
+                    $code = rand(100000,999999);
+                    $giftObj = VoucherGiftModel::findBy('giftCode',$code);
+
+                    if (!$giftObj)
+                    {
+                        $arrSet['giftCode'] = $code;
+                        $success = true;
+                    }                
+                }
+            }
+
+        }
+        
+        if($arrSet) {
+            $this->Database->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($dc->id);
+        }
+        
+        
+    }
+
+    /**
 	 * Add an image to each record
 	 *
 	 * @param array         $row
@@ -199,13 +325,30 @@ class tl_voucher_gift extends Backend
 	 *
 	 * @return array
 	 */
-	public function acceptorTitle($row, $label, DataContainer $dc, $args)
+	public function titles($row, $label, DataContainer $dc, $args)
 	{
 
-        $objAcceptor = VoucherAcceptorModel::findBy('id',$row['acceptor']);        
+        $objAcceptor = VoucherAcceptorModel::findBy('id',$row['acceptorID']);        
+        $objCard = VoucherCardModel::findBy('id',$row['cardID']);
+        $objStaff = VoucherStaffModel::findBy('id',$row['staffID']);
 
-		$args[3] = $objAcceptor->title;
+        $args[0] = $objCard->title;
+        $args[3] = $objStaff->name;
+        $args[4] = $objAcceptor->title;
 
 		return $args;
 	}
+
+    /**
+     * @param $serialCode
+     * @return string
+     */
+    public function serialCodeCallback($serialCode)
+    {
+        
+        $serialCode = rand(100000,999999);
+
+        return $serialCode;
+    }
+
 }
