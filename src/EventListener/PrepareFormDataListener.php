@@ -5,8 +5,8 @@ namespace Respinar\ContaoVoucherBundle\EventListener;
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Form;
 
-use Respinar\ContaoVoucherBundle\Model\AcceptorModel;
-use Respinar\ContaoVoucherBundle\Model\VoucherModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
 
 
 /**
@@ -17,8 +17,8 @@ class PrepareFormDataListener
     public function __invoke(array &$submittedData, array $labels, array $fields, Form $form): void
     {
       
-      $objVocucher = VoucherModel::findBy('voucherCode',$submittedData['voucherCode']);
-      $objAcceptor = AcceptorModel::findBy('code',$submittedData['acceptorCode']);
+      $objVocucher = VoucherGiftModel::findBy('voucherCode',$submittedData['voucherCode']);
+      $objAcceptor = VoucherAcceptorModel::findBy('code',$submittedData['acceptorCode']);
 
       if ($objVocucher == null)
       {

@@ -8,8 +8,8 @@ use Contao\Form;
 //use Doctrine\DBAL\Connection;
 //use Symfony\Component\Security\Core\Security;
 
-use Respinar\ContaoVoucherBundle\Model\AcceptorModel;
-use Respinar\ContaoVoucherBundle\Model\VoucherModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
 
 /**
  * @Hook("storeFormData")
@@ -21,8 +21,8 @@ class StoreFormDataListener
     public function __invoke(array $data, Form $form): array
     {
       
-      $objVocucher = VoucherModel::findBy('voucherCode',$data['voucherCode']);
-      $objAcceptor = AcceptorModel::findBy('code',$data['acceptorCode']);
+      $objVocucher = VoucherGiftModel::findBy('voucherCode',$data['voucherCode']);
+      $objAcceptor = VoucherAcceptorModel::findBy('code',$data['acceptorCode']);
 
       if ($objVocucher == null)
       {
