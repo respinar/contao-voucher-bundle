@@ -93,8 +93,8 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'eval'      => array('mandatory' => false, 'unique'=>true, 'maxlength' => 5, 'tl_class' => 'w50'),
+            'sql'       => "int(5) unsigned NOT NULL default '0'"
         ),
         'phone' => array(
             'inputType' => 'text',
@@ -103,7 +103,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'maxlength' => 14, 'tl_class' => 'w50'),
+            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 14, 'tl_class' => 'w50'),
             'sql'       => "varchar(20) NOT NULL default ''"
         ),
         'family_member_qty'    => array(
