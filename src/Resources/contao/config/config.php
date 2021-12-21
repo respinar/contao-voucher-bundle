@@ -13,26 +13,44 @@
 use Respinar\ContaoVoucherBundle\EventListener\StoreFormDataListener;
 use Respinar\ContaoVoucherBundle\EventListener\PrepareFormDataListener;
 
-use Respinar\ContaoVoucherBundle\Model\AcceptorModel;
-use Respinar\ContaoVoucherBundle\Model\VoucherModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherStaffModel;
 
 
 
 /**
  * Backend modules
  */
-$GLOBALS['BE_MOD']['voucher_module']['voucher_codes'] = array(
-    'tables' => array('tl_voucher')
+$GLOBALS['BE_MOD']['voucher_module'] = array (
+    'voucher_gift' => array( 'tables'=> array('tl_voucher_gift')),
+    'voucher_card' => array( 'tables'=> array('tl_voucher_card')),
+    'voucher_staff' => array( 'tables'=> array('tl_voucher_staff')),
+    'voucher_acceptor' => array( 'tables'=> array('tl_voucher_acceptor'))
+
 );
-$GLOBALS['BE_MOD']['voucher_module']['voucher_acceptors'] = array(
-    'tables' => array('tl_acceptor')
+/*
+$GLOBALS['BE_MOD']['voucher_module']['voucher_gift'] = array(
+    'tables' => array('tl_voucher_gift')
 );
+$GLOBALS['BE_MOD']['voucher_module']['voucher_acceptor'] = array(
+    'tables' => array('tl_voucher_acceptor')
+);
+$GLOBALS['BE_MOD']['voucher_module']['voucher_card'] = array(
+    'tables' => array('tl_voucher_card')
+);
+$GLOBALS['BE_MOD']['voucher_module']['voucher_staff'] = array(
+    'tables' => array('tl_voucher_staff')
+);*/
 
 /**
  * Models
  */
-$GLOBALS['TL_MODELS']['tl_voucher'] = VoucherModel::class;
-$GLOBALS['TL_MODELS']['tl_acceptor'] = AcceptorModel::class;
+$GLOBALS['TL_MODELS']['tl_voucher_card']     = VoucherCardModel::class;
+$GLOBALS['TL_MODELS']['tl_voucher_gift']     = VoucherGiftModel::class;
+$GLOBALS['TL_MODELS']['tl_voucher_staff']    = VoucherStaffModel::class;
+$GLOBALS['TL_MODELS']['tl_voucher_acceptor'] = VoucherAcceptorModel::class;
 
 
 //$GLOBALS['TL_HOOKS']['storeFormData'][] = [StoreFormDataListener::class, '__invoke'];

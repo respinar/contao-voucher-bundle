@@ -18,8 +18,10 @@ use Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherConfrimModuleC
  * Backend modules
  */
 $GLOBALS['TL_LANG']['MOD']['voucher_module'] = 'Voucher Manger';
-$GLOBALS['TL_LANG']['MOD']['voucher_codes'] = ['Vochers', 'Voucher Manger'];
-$GLOBALS['TL_LANG']['MOD']['voucher_acceptors'] = ['Acceptors', 'Acceptor Manger'];
+$GLOBALS['TL_LANG']['MOD']['voucher_gift'] = ['Gifts', 'Gift Manger'];
+$GLOBALS['TL_LANG']['MOD']['voucher_card'] = ['Cards', 'Card Manger'];
+$GLOBALS['TL_LANG']['MOD']['voucher_staff'] = ['Staffs', 'Staff Manger'];
+$GLOBALS['TL_LANG']['MOD']['voucher_acceptor'] = ['Acceptors', 'Acceptor Manger'];
 
 /**
  * Frontend modules
