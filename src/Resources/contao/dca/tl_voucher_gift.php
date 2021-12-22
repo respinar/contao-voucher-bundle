@@ -49,12 +49,13 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
         ),
         'onsubmit_callback'       => array
         (
-            array('tl_voucher_gift', 'adjustGift')
+            array('tl_voucher_gift', 'adjustGift'),
+            array('tl_voucher_gift', 'sendSMS')
         )
     ),
     'edit'        => array(
         'buttons_callback' => array(
-            array('tl_voucher_gift', 'buttonsCallback')
+            array('tl_voucher_gift', 'sendSMSButton')
         )
     ),
     'list'        => array(
@@ -65,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields' => array('cardID','giftCode','giftQty','staffID', 'acceptorID','invoice','datetime','status'),
+            'fields' => array('tstamp','cardID','giftCode','giftQty','staffID', 'acceptorID','invoice','datetime','status'),
             'showColumns'             => true,
             'label_callback'          => array('tl_voucher_gift', 'titles')
         ),
@@ -112,6 +113,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'sql' => "int(10) unsigned NOT NULL auto_increment"
         ),
         'tstamp'         => array(
+            'flag' => 6,
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ),
         'staffID'          => array(
@@ -232,10 +234,11 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
         ),
         'status' => array
 		(
+            'deafult'   => 'new',
 			'exclude'   => true,
 			'inputType' => 'select',
             'reference' => $GLOBALS['TL_LANG']['tl_voucher_gift'],
-            'options'   => array('new','sent','confrimed', 'duplicate','error','expired'),
+            'options'   => array('new','sent','confrimed','error','expired'),
 			'eval'      => array('disabled'=>true,'tl_class'=>'w50'),
 			'sql'       => "char(20) NOT NULL default ''"
 		),
@@ -248,16 +251,38 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
  */
 class tl_voucher_gift extends Backend
 {
+
+       /**
+     * onsubmit callback
+     * Run the bundle maker.
+     *
+     * @throws Exception
+     */
+    public function sendSMS(DataContainer $dc): void
+    {
+        //$dc->activeRecord->status = "send";
+
+        if ('' !== Input::get('id') && '' === Input::post('sendSMS') && 'tl_voucher_gift' === Input::post('FORM_SUBMIT') && 'auto' !== Input::post('SUBMIT_TYPE')) 
+        {
+            $arrSet['status'] = "sent";
+            if($arrSet) {
+                $this->Database->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($dc->id);
+            }
+        }
+
+    }
+
+
     /**
      * @param $arrButtons
      * @param  DC_Table $dc
      * @return mixed
      */
-    public function buttonsCallback($arrButtons, DC_Table $dc)
+    public function sendSMSButton($arrButtons, DC_Table $dc)
     {
         if (Input::get('act') === 'edit')
         {
-            $arrButtons['customButton'] = '<button type="submit" name="customButton" id="customButton" class="tl_submit customButton" accesskey="x">' . $GLOBALS['TL_LANG']['tl_voucher_gift']['customButton'] . '</button>';
+            $arrButtons['sendSMS'] = '<button type="submit" name="sendSMS" id="sendSMS" class="tl_submit sendSMS">' . $GLOBALS['TL_LANG']['tl_voucher_gift']['sendSMS'] . '</button>';
         }
 
         return $arrButtons;
@@ -332,9 +357,9 @@ class tl_voucher_gift extends Backend
         $objCard = VoucherCardModel::findBy('id',$row['cardID']);
         $objStaff = VoucherStaffModel::findBy('id',$row['staffID']);
 
-        $args[0] = $objCard->title;
-        $args[3] = $objStaff->name;
-        $args[4] = $objAcceptor->title;
+        $args[1] = $objCard->title;
+        $args[4] = $objStaff->name;
+        $args[5] = $objAcceptor->title;
 
 		return $args;
 	}

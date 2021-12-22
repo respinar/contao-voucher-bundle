@@ -9,7 +9,7 @@ use Contao\Form;
 //use Symfony\Component\Security\Core\Security;
 
 use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
-use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
 
 /**
  * @Hook("storeFormData")
@@ -21,45 +21,40 @@ class StoreFormDataListener
     public function __invoke(array $data, Form $form): array
     {
       
-      $objVocucher = VoucherGiftModel::findBy('voucherCode',$data['voucherCode']);
-      $objAcceptor = VoucherAcceptorModel::findBy('code',$data['acceptorCode']);
+      $objGift = VoucherGiftModel::findBy('giftCode',$data['giftCode']);
 
-      if ($objVocucher == null)
-      {
-        if ($objAcceptor == null) {
-          $status = 'error';          
+      if ($objGift) {
+
+        $objAcceptor = VoucherAcceptorModel::findBy('code',$data['acceptorCode']);
+
+        $acceptorID = $objAcceptor->id;
+
+        if ($objAcceptor)
+        {
+
+          $status = 'confrimed';
+
         }
         else
         {
-          $acceptor = $objAcceptor->id;
-          $status = 'confrimed';
-        }                
+
+          $status = 'error';
+
+        }
       }
       else
       {
-        if ($objVocucher->status != 'error')
-        {
-          $status = 'duplicate';
-          $acceptor = $objAcceptor->id;
-        }
-        else
-        {
-          if ($objAcceptor == null) {
-            $status = 'error';
-            $acceptor = $objAcceptor->id;        
-          }
-          else
-          {
-            $acceptor = $objAcceptor->id;
-            $status = 'confrimed';
-          }
-        }
+
+        // کد گیفت یافت نشد
+        $status = "notfound";
+
       }
 
-      $data['acceptor'] = $acceptor;
-      $date['status'] = $status;
+      $data['status'] = $status;
+      $data['acceptorID'] = $acceptorID;
 
       return $data;
+     
     }
 
 }

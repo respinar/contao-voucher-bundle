@@ -27,8 +27,8 @@ $GLOBALS['BE_MOD']['voucher_module'] = array (
     'voucher_gift' => array( 'tables'=> array('tl_voucher_gift')),
     'voucher_card' => array( 'tables'=> array('tl_voucher_card')),
     'voucher_staff' => array( 'tables'=> array('tl_voucher_staff')),
-    'voucher_acceptor' => array( 'tables'=> array('tl_voucher_acceptor'))
-
+    'voucher_acceptor' => array( 'tables'=> array('tl_voucher_acceptor')),
+    'voucher_log' => array( 'tables'=> array('tl_voucher_log'))
 );
 /*
 $GLOBALS['BE_MOD']['voucher_module']['voucher_gift'] = array(
@@ -54,4 +54,4 @@ $GLOBALS['TL_MODELS']['tl_voucher_acceptor'] = VoucherAcceptorModel::class;
 
 
 //$GLOBALS['TL_HOOKS']['storeFormData'][] = [StoreFormDataListener::class, '__invoke'];
-$GLOBALS['TL_HOOKS']['prepareFormData'][] = [PrepareFormDataListener::class, '__invoke'];
+//$GLOBALS['TL_HOOKS']['prepareFormData'][] = [PrepareFormDataListener::class, '__invoke'];

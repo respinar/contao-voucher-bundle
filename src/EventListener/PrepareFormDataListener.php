@@ -17,46 +17,41 @@ class PrepareFormDataListener
     public function __invoke(array &$submittedData, array $labels, array $fields, Form $form): void
     {
       
-      $objVocucher = VoucherGiftModel::findBy('voucherCode',$submittedData['voucherCode']);
-      $objAcceptor = VoucherAcceptorModel::findBy('code',$submittedData['acceptorCode']);
+      $objGift = VoucherGiftModel::findBy('giftCode',$data['giftCode']);
 
-      if ($objVocucher == null)
-      {
-        if ($objAcceptor == null) {
-          $status = 'error';          
+      if ($objGift) {
+
+        $objAcceptor = VoucherAcceptorModel::findBy('code',$data['acceptorCode']);
+
+        $acceptorID = $objAcceptor->code;
+
+        if ($objAcceptor)
+        {
+
+          $status = 'confrimed';
+
         }
         else
         {
-          $status = 'confrimed';
-          $acceptor = $objAcceptor->id;          
-        }                
+
+          $status = 'error';
+
+        }
       }
       else
       {
-        if ($objVocucher->status != 'error')
-        {
-          $status = 'duplicate';
-          $acceptor = $objAcceptor->id;
-        }
-        else
-        {
-          if ($objAcceptor == null) {
-            $status = 'error';
-            $acceptor = $objAcceptor->id;        
-          }
-          else
-          {
-            $acceptor = $objAcceptor->id;
-            $status = 'confrimed';
-          }
-        }
+
+        // کد گیفت یافت نشد
+
       }
 
+      $submittedData['acceptorID'] = $acceptorID;
       $submittedData['status'] = $status;
-      $submittedData['acceptor'] = $acceptor;
+
+      
 
       $fields['status'] = $status;
-      $fields['acceptor'] = $acceptor;
+      $fields['acceptor'] = $acceptorID;
 
       //print_r($fields);
 

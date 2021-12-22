@@ -114,7 +114,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'sorting'   => true,
             'reference' => $GLOBALS['TL_LANG']['tl_voucher_staff'],
             'options'   => array('1', '2','3','4','5','6'),
-            'eval'      => array('disabled'=>false,'includeBlankOption' => true, 'tl_class' => 'w50'),
+            'eval'      => array('disabled'=>false,'tl_class' => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''",
         ),
         'note'  => array(

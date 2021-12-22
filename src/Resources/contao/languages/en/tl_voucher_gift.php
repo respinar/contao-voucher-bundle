@@ -30,6 +30,7 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['show'] = ["Datensatz mit ID: %s ansehen"
 /**
  * Fields
  */
+$GLOBALS['TL_LANG']['tl_voucher_gift']['tstamp'] = ["Issue date", ""];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['cardID'] = ["Card", "Wählen Sie aus."];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['staffID'] = ["Staff", "Wählen Sie aus."];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['giftCredit'] = ["Credit", "Wählen Sie aus."];
@@ -55,4 +56,4 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['error'] = "Error!";
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_voucher_gift']['customButton'] = "Custom Routine starten";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['sendSMS'] = "Send SMS";

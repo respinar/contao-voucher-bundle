@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{voucher_legend},title,credit,type;{note_legend:hide},note'
+        'default'      => '{card_legend},title,credit,type;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -138,4 +138,5 @@ class tl_voucher_card extends Backend
 
         return $arrButtons;
     }
+
 }
