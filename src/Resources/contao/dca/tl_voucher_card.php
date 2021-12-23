@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{card_legend},title,credit,type;{note_legend:hide},note'
+        'default'      => '{card_legend},title,type,credit,expiration,single;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -93,7 +93,7 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'eval'      => array('rgxp' => 'natural', 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'type'    => array(
@@ -107,6 +107,25 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
             'eval'      => array('disabled'=>false,'includeBlankOption' => true, 'tl_class' => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''",
         ),
+        'expiration' => array(
+            'inputType' => 'text',
+            'default'   => 30,
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'eval'      => array('rgxp' => 'natural','mandatory' => true, 'maxlength' => 4, 'tl_class' => 'w50'),
+            'sql'       => "int(4) unsigned NOT NULL default '30'"
+        ),
+        'single' => array
+		(
+			'exclude'                 => true,
+			'filter'                  => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50 m12'),
+			'sql'                     => "char(1) NOT NULL default ''"
+		),
         'note'  => array(
             'inputType' => 'textarea',
             'exclude'   => true,
