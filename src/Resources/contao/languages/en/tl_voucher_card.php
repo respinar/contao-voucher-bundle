@@ -33,4 +33,6 @@ $GLOBALS['TL_LANG']['tl_voucher_card']['tstamp'] = ["Issue date", ""];
 $GLOBALS['TL_LANG']['tl_voucher_card']['title'] = ["Title", "Wählen Sie aus."];
 $GLOBALS['TL_LANG']['tl_voucher_card']['credit'] = ["Credit", "Wählen Sie aus."];
 $GLOBALS['TL_LANG']['tl_voucher_card']['type'] = ["type", "Wählen Sie aus."];
+$GLOBALS['TL_LANG']['tl_voucher_card']['single'] = ["Single", "This Card is only for one person."];
+$GLOBALS['TL_LANG']['tl_voucher_card']['expiration'] = ["Expiration (days)", "This Card is only for one person."];
 $GLOBALS['TL_LANG']['tl_voucher_card']['note'] =   ["Note", "Geben Sie die Werte ein"];
