@@ -24,6 +24,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
     // Config
     'config'      => array(
         'dataContainer'    => 'Table',        
+        'notCopyable'      => true,
         'enableVersioning' => true,
         'sql'              => array(
             'keys' => array(
@@ -39,7 +40,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'panelLayout' => 'filter;search,limit'
         ),
         'label'             => array(
-            'fields' => array('name','mobile','code'),
+            'fields' => array('name','phone','employeeID'),
             'showColumns'             => true
         ),
         'global_operations' => array(
@@ -66,7 +67,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{voucher_legend},name,code,phone,family_member_qty;{note_legend:hide},note'
+        'default'      => '{staff_legend},name,employeeID,phone,familyMembers;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -74,7 +75,8 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'sql' => "int(10) unsigned NOT NULL auto_increment"
         ),
         'tstamp'         => array(
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'flag' => 6,
+            'sql'  => "int(10) unsigned NOT NULL default '0'"
         ),
         'name'          => array(
             'inputType' => 'text',
@@ -86,7 +88,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''"
         ),
-        'code'          => array(
+        'employeeID' => array(
             'inputType' => 'text',
             'exclude'   => true,
             'search'    => true,
@@ -106,16 +108,16 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 14, 'tl_class' => 'w50'),
             'sql'       => "varchar(20) NOT NULL default ''"
         ),
-        'family_member_qty'    => array(
+        'familyMembers'    => array(
             'inputType' => 'select',
             'exclude'   => true,
             'search'    => true,
             'filter'    => true,
             'sorting'   => true,
             'reference' => $GLOBALS['TL_LANG']['tl_voucher_staff'],
-            'options'   => array('1', '2','3','4','5','6'),
+            'options'   => array(1, 2, 3, 4, 5, 6),
             'eval'      => array('disabled'=>false,'tl_class' => 'w50'),
-            'sql'       => "varchar(255) NOT NULL default ''",
+            'sql'       => "int(1) unsigned NOT NULL default '1'",
         ),
         'note'  => array(
             'inputType' => 'textarea',
