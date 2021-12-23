@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields' => array('tstamp','cardID','giftCode','giftQty','staffID', 'acceptorID','invoice','datetime','status'),
+            'fields' => array('tstamp','giftCode','cardID','giftQty','staffID', 'expirationDate','status'),
             'showColumns'             => true,
             'label_callback'          => array('tl_voucher_gift', 'titles')
         ),
@@ -105,7 +105,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{staff_legend},staffID,occasion;{voucher_legend},cardID,giftQty,giftCode,giftCredit;{confrim_legend},acceptorID,invoice,datetime,status;{note_legend:hide},note'
+        'default'      => '{staff_legend},staffID,occasion;{voucher_legend},cardID,giftQty,giftCode,giftCredit,expirationDate;{confrim_legend},acceptorID,invoice,datetime,status;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -180,7 +180,17 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'flag'      => 1,
             'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ),    
+        ),
+        'expirationDate' => array
+		(
+			'exclude'                 => true,
+			'filter'                  => true,
+			'sorting'                 => true,
+			'flag'                    => 6,
+			'inputType'               => 'text',
+			'eval'                    => array('rgxp'=>'date', 'doNotCopy'=>true, 'datepicker'=>true, 'tl_class'=>'w50 wizard'),			
+			'sql'                     => "int(10) unsigned NOT NULL default 0"
+		),
         'datetime'          => array(
             'inputType' => 'text',
             'exclude'   => true,
@@ -234,12 +244,13 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
         ),
         'status' => array
 		(
-            'deafult'   => 'new',
+            'inputType' => 'select',
+            'default'   => 'new',
 			'exclude'   => true,
 			'inputType' => 'select',
             'reference' => $GLOBALS['TL_LANG']['tl_voucher_gift'],
-            'options'   => array('new','sent','confrimed','error','expired'),
-			'eval'      => array('disabled'=>true,'tl_class'=>'w50'),
+            'options'   => array('new','sent','uesd','error','expired'),
+			'eval'      => array('readonly'=>true,'tl_class'=>'w50'),
 			'sql'       => "char(20) NOT NULL default ''"
 		),
     )
@@ -304,7 +315,7 @@ class tl_voucher_gift extends Backend
         if ($dc->activeRecord->staffID)
         {
             $staffObj = VoucherStaffModel::findBy('id', $dc->activeRecord->staffID);
-            $arrSet['giftQty'] =  $staffObj->family_member_qty;
+            $arrSet['giftQty'] =  $staffObj->familyMembers;
         }
 
         if ($dc->activeRecord->cardID) {
@@ -313,6 +324,14 @@ class tl_voucher_gift extends Backend
                     
             $arrSet['giftCredit'] = $cardObj->credit;
             $arrSet['giftType'] = $cardObj->type;
+            if ( !isset($dc->activeRecode->expirationDate) )
+            {
+                $arrSet['expirationDate'] = $cardObj->expiration * 86400 + time();
+            }
+
+            if ($cardObj->single) {
+                $arrSet['giftQty'] = 1;
+            }
 
             if ( !$dc->activeRecord->giftCode ) {
 
@@ -353,13 +372,13 @@ class tl_voucher_gift extends Backend
 	public function titles($row, $label, DataContainer $dc, $args)
 	{
 
-        $objAcceptor = VoucherAcceptorModel::findBy('id',$row['acceptorID']);        
+        //$objAcceptor = VoucherAcceptorModel::findBy('id',$row['acceptorID']);        
         $objCard = VoucherCardModel::findBy('id',$row['cardID']);
         $objStaff = VoucherStaffModel::findBy('id',$row['staffID']);
 
-        $args[1] = $objCard->title;
+        $args[2] = $objCard->title;
         $args[4] = $objStaff->name;
-        $args[5] = $objAcceptor->title;
+        //$args[4] = $objAcceptor->title;
 
 		return $args;
 	}
