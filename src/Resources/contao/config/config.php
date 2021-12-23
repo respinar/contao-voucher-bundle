@@ -10,8 +10,10 @@
  * @link https://github.com/respinar/contao-voucher-bundle
  */
 
-use Respinar\ContaoVoucherBundle\EventListener\StoreFormDataListener;
-use Respinar\ContaoVoucherBundle\EventListener\PrepareFormDataListener;
+//use Respinar\ContaoVoucherBundle\EventListener\StoreFormDataListener;
+//use Respinar\ContaoVoucherBundle\EventListener\PrepareFormDataListener;
+//use Respinar\ContaoVoucherBundle\EventListener\ValidateFormFieldListener;
+use Respinar\ContaoVoucherBundle\EventListener\ProcessFormDataListener;
 
 use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
@@ -30,19 +32,6 @@ $GLOBALS['BE_MOD']['voucher_module'] = array (
     'voucher_acceptor' => array( 'tables'=> array('tl_voucher_acceptor')),
     'voucher_log' => array( 'tables'=> array('tl_voucher_log'))
 );
-/*
-$GLOBALS['BE_MOD']['voucher_module']['voucher_gift'] = array(
-    'tables' => array('tl_voucher_gift')
-);
-$GLOBALS['BE_MOD']['voucher_module']['voucher_acceptor'] = array(
-    'tables' => array('tl_voucher_acceptor')
-);
-$GLOBALS['BE_MOD']['voucher_module']['voucher_card'] = array(
-    'tables' => array('tl_voucher_card')
-);
-$GLOBALS['BE_MOD']['voucher_module']['voucher_staff'] = array(
-    'tables' => array('tl_voucher_staff')
-);*/
 
 /**
  * Models
@@ -55,3 +44,5 @@ $GLOBALS['TL_MODELS']['tl_voucher_acceptor'] = VoucherAcceptorModel::class;
 
 //$GLOBALS['TL_HOOKS']['storeFormData'][] = [StoreFormDataListener::class, '__invoke'];
 //$GLOBALS['TL_HOOKS']['prepareFormData'][] = [PrepareFormDataListener::class, '__invoke'];
+//$GLOBALS['TL_HOOKS']['validateFormField'][] = [ValidateFormFieldListener::class, '__invoke'];
+$GLOBALS['TL_HOOKS']['processFormData'][] = [ProcessFormDataListener::class, '__invoke'];
