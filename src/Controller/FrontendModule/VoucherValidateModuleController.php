@@ -32,13 +32,13 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class VoucherConfrimModuleController
+ * Class VoucherValidateModuleController
  *
- * @FrontendModule(VoucherConfrimModuleController::TYPE, category="voucher_confrim", template="mod_voucher_confrim_module")
+ * @FrontendModule(VoucherValidateModuleController::TYPE, category="voucher_validate", template="mod_voucher_validate_module")
  */
-class VoucherConfrimModuleController extends AbstractFrontendModuleController
+class VoucherValidateModuleController extends AbstractFrontendModuleController
 {
-    public const TYPE = 'voucher_confrim_module';
+    public const TYPE = 'voucher_validate_module';
 
     /**
      * @var PageModel

@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @link https://github.com/respinar/contao-voucher-bundle
  */
 
-use Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherConfrimModuleController;
+use Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherValidateModuleController;
 
 /**
  * Backend modules
@@ -22,10 +22,11 @@ $GLOBALS['TL_LANG']['MOD']['voucher_gift'] = ['Gifts', 'Gift Manger'];
 $GLOBALS['TL_LANG']['MOD']['voucher_card'] = ['Cards', 'Card Manger'];
 $GLOBALS['TL_LANG']['MOD']['voucher_staff'] = ['Staffs', 'Staff Manger'];
 $GLOBALS['TL_LANG']['MOD']['voucher_acceptor'] = ['Acceptors', 'Acceptor Manger'];
+$GLOBALS['TL_LANG']['MOD']['voucher_log'] = ['Voucher logs', 'View logs'];
 
 /**
  * Frontend modules
  */
-$GLOBALS['TL_LANG']['FMD']['voucher_confrim'] = 'Voucher Confirmation';
-$GLOBALS['TL_LANG']['FMD'][VoucherConfrimModuleController::TYPE] = ['Vocher Confirmation', 'Confrimmation of Voucher'];
+$GLOBALS['TL_LANG']['FMD']['voucher_validate'] = 'Voucher Validate';
+$GLOBALS['TL_LANG']['FMD'][VoucherValidateModuleController::TYPE] = ['Voucher Validation', 'Validation of Gift Card'];
 
