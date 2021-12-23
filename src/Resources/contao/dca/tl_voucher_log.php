@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields'      => array('tstamp','datetime','giftCode', 'acceptorID','invoice','status'),
+            'fields'      => array('tstamp','datetime','giftCode', 'acceptorID','staffID','invoice'),
             'showColumns'             => true,
 			//'label_callback'          => array('tl_voucher_log', 'titles')
         ),
@@ -115,6 +115,13 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
             'sorting'   => true,
             'sql'       => "varchar(255) NULL default ''"
         ),
+        'staffID' => array(
+            'foreignKey'=> 'tl_voucher_acceptor.title',
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'sql'       => "varchar(255) NULL default ''"
+        ),
         'status' => array
 		(
             'search'    => true,
@@ -149,9 +156,9 @@ class tl_voucher_log extends Backend
         $objAcceptor = VoucherAcceptorModel::findBy('id',$row['acceptorID']);        
         $objStaff = VoucherStaffModel::findBy('id',$row['staffID']);
 
-        $args[1] = $objCard->title;
+        $args[2] = $objCard->title;        
+        $args[3] = $objAcceptor->title;
         $args[4] = $objStaff->name;
-        $args[5] = $objAcceptor->title;
 
 		return $args;
 	}
