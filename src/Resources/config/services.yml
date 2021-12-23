@@ -1,8 +1,8 @@
 services:
 
-    # Contao frontend module Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherConfrimModuleController
+    # Contao frontend module Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherValidateModuleController
     # We used annotations for tagging the frontend module category, the frontend module type and the frontend module template
-    Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherConfrimModuleController:
+    Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherValidateModuleController:
         tags:
             - { name: container.service_subscriber }
         public: true
