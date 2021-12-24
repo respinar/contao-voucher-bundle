@@ -18,18 +18,25 @@ use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\Input;
 use Contao\Date;
 use Contao\Form;
 use Contao\FrontendUser;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\Template;
+use Contao\Database;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherStaffModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
+
 
 /**
  * Class VoucherValidateModuleController
@@ -38,6 +45,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class VoucherValidateModuleController extends AbstractFrontendModuleController
 {
+    
     public const TYPE = 'voucher_validate_module';
 
     /**
@@ -84,41 +92,92 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
      */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        $userFirstname = $form->code;
-        $user = $this->get('security.helper')->getUser();
-        if ($user instanceof FrontendUser)
+        
+        $giftCode = Input::post('giftCode');
+        $acceptorCode = Input::post('acceptorCode');
+        $invoice = Input::post('invoice');
+
+        $giftObj = VoucherGiftModel::findBy('giftCode',$giftCode);
+        
+
+        if (!$giftObj)
         {
-            $userFirstname = $user->firstname;
+            $template->error = $GLOBALS['TL_LANG']['ERR']['invalid-gift-card']; 
         }
-
-        /** @var Session $session */
-        $session = $request->getSession();
-        $feBag = $session->getBag('contao_frontend');
-        $feBag->set('foo', 'bar');
-
-        /** @var Date $dateAdapter */
-        $dateAdapter = $this->get('contao.framework')->getAdapter(Date::class);
-        $intWeekday = $dateAdapter->parse('w');
-        $translator = $this->get('translator');
-        $strWeekday = $translator->trans('DAYS.' . $intWeekday, [], 'contao_default');
-
-        $arrGuests = [];
-        $stmt = $this->get('database_connection')
-            ->executeQuery(
-                'SELECT * FROM tl_member WHERE gender=? ORDER BY lastname',
-                ['female']
-            );
-        while (false !== ($objMember = $stmt->fetch(\PDO::FETCH_OBJ)))
+        else if ($giftObj->status == "used")
         {
-            $arrGuests[] = $objMember->firstname;
+            $template->error = $GLOBALS['TL_LANG']['ERR']['used-gift-card']; 
         }
+        else if ($giftObj->expirationDate < time())
+        {
+            $template->error = $GLOBALS['TL_LANG']['ERR']['expired-gift-card']; 
+        }
+        else
+        {
 
-        $template->helloTitle = sprintf(
-            'Hi %s, and welcome to the "Hello World Module". Today is %s.',
-            $userFirstname, $strWeekday
-        );
+            $cardObj = VoucherCardModel::findBy('id',$giftObj->pid);
 
-        $template->helloText = 'Our guests today are: ' . implode(', ', $arrGuests);
+            $acceptorObj = VoucherAcceptorModel::findBy('code',$acceptorCode);
+
+            if (!$acceptorObj) {
+                $template->error = $GLOBALS['TL_LANG']['ERR']['invalid-acceptor']; 
+            }
+            else
+            {
+                if ($acceptorObj->type != $cardObj->type)
+                {
+                    $template->error = $GLOBALS['TL_LANG']['ERR']['inconsistent-acceptor'];
+                }
+                else
+                {
+                    $staffObj = VoucherStaffModel::findBy('id',$giftObj->staffID);
+
+                    $totalCredit = $giftObj->giftQty * $giftObj->giftCredit;
+
+                    $template->staffName = $staffObj->name;
+                    $template->acceptorTitle = $acceptorObj->title;
+
+                    $template->giftTitle = $cardObj->title;
+                    $template->giftCode = $giftCode;
+                    $template->giftCredit = $giftObj->giftCredit;
+                    $template->giftQty = $giftObj->giftQty;
+
+                    $template->expirationDate = Date::parse($this->page->dateFormat,$giftObj->expirationDate);
+
+                    $template->totalCredit = $totalCredit;
+                    $template->invoice = $invoice;
+
+                    
+                    $balance = ($invoice > $totalCredit) ? $invoice - $totalCredit : 0;
+                    
+                    $template->balance = $balance;
+
+                    while (true)
+                    {
+                        $trackingCode = rand(10000000,99999999);
+                        $trackingObj = VoucherGiftModel::findBy('trackingCode',$trackingCode);
+
+                        if (!$trackingObj)
+                        {                            
+                            break;
+                        }                
+                    }
+
+                    $template->trackingCode = $trackingCode;
+
+                    $arrSet['acceptorID'] = $acceptorObj->id;
+                    $arrSet['invoice'] = $invoice;
+                    $arrSet['balance'] = $balance;
+                    $arrSet['trackingCode'] = $trackingCode;
+                    $arrSet['datetime'] = time();
+                    $arrSet['status'] = "used";
+
+                    $db   = Database::getInstance();
+                    $stmt = $db->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($giftObj->id);
+        
+                }
+            }
+        }
 
         return $template->getResponse();
     }

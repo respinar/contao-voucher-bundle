@@ -2,7 +2,26 @@
 
 <?php $this->block('content'); ?>
 
-    <h3><?= $this->helloTitle ?></h3>
-    <p><?= $this->helloText ?></p>
+    <?php if($this->error): ?>
+        <p class="erro"><?= $this->error; ?>
+    <?php else: ?>
+        <p>نام پذیرنده:‌ <?= $this->acceptorTitle; ?></p>
+        <p>نام مشتری:‌ <?= $this->staffName; ?></p>
+        <br>
+        <p>عنوان کارت هدیه:‌ <?= $this->giftTitle; ?></p>
+        <p>کد کارت هدیه:‌ <?= $this->giftCode; ?></p>
+        <p>تعداد کارت هدیه:‌ <?= $this->giftQty; ?></p>
+        <p>اعتبار هر کارت:‌ <?= $this->giftCredit; ?></p>
+        <p>اعتبار کل:‌ <?= $this->totalCredit; ?></p>
+        <p>تاریخ اعتبار:‌ <?= $this->expirationDate; ?></p>
+        <br>
+        <p>مبلغ کل فاکتور:‌ <?= $this->invoice; ?></p>
+        <p>مبلغ قابل دریافت:‌ <?= $this->balance; ?></p>
+
+        <p>کد رهگیری: <?= $this->trackingCode; ?></p>
+
+        
+
+    <?php endif; ?>
 
 <?php $this->endblock(); ?>
