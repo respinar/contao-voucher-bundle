@@ -116,7 +116,7 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
             'sql'       => "varchar(255) NULL default ''"
         ),
         'staffID' => array(
-            'foreignKey'=> 'tl_voucher_acceptor.title',
+            'foreignKey'=> 'tl_voucher_staff.name',
             'search'    => true,
             'filter'    => true,
             'sorting'   => true,
@@ -129,7 +129,7 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
             'sorting'   => true,
             'reference' => $GLOBALS['TL_LANG']['tl_voucher_log'],
 			'sql'       => "char(20) NOT NULL default ''"
-		),
+		)
     )
 );
 
