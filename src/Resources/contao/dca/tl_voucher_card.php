@@ -23,7 +23,8 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
 
     // Config
     'config'      => array(
-        'dataContainer'    => 'Table',        
+        'dataContainer'    => 'Table',
+        'ctable'           => array('tl_voucher_gift'),
         'enableVersioning' => true,
         'sql'              => array(
             'keys' => array(
@@ -34,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
     'list'        => array(
         'sorting'         => array(
             'mode'        => 1,            
-            'fields'      => array('tstamp'),
+            'fields'      => array('title'),
             'flag'        => 12,
             'panelLayout' => 'filter;search,limit'
         ),
@@ -51,13 +52,17 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
             )
         ),
         'operations'        => array(
-            'edit'   => array(
-                'label' => &$GLOBALS['TL_LANG']['tl_voucher_card']['edit'],
-                'href'  => 'act=edit',
-                'icon'  => 'edit.gif'
-            ),
+            'edit' => array
+			(
+				'href'                => 'table=tl_voucher_gift',
+				'icon'                => 'edit.svg'
+			),
+			'editheader' => array
+			(
+				'href'                => 'act=edit',
+				'icon'                => 'header.svg'
+			),            
             'show'   => array(
-                'label'      => &$GLOBALS['TL_LANG']['tl_voucher_card']['show'],
                 'href'       => 'act=show',
                 'icon'       => 'show.gif',
                 'attributes' => 'style="margin-right:3px"'
@@ -74,6 +79,7 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
             'sql' => "int(10) unsigned NOT NULL auto_increment"
         ),
         'tstamp'         => array(
+            'flag' => 6,
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ),
         'title'          => array(
