@@ -20,4 +20,8 @@ declare(strict_types=1);
 /**
  * Errors
  */
-//$GLOBALS['TL_LANG']['ERR'][''] = '';
+$GLOBALS['TL_LANG']['ERR']['invalid-gift-card'] = "Gift Card code is invalid.";
+$GLOBALS['TL_LANG']['ERR']['used-gift-card'] = "This Gift card is already used.";
+$GLOBALS['TL_LANG']['ERR']['expired-gift-card'] = "This Gift card is expired.";
+$GLOBALS['TL_LANG']['ERR']['invalid-acceptor'] = "The Accpector code is invalid.";
+$GLOBALS['TL_LANG']['ERR']['inconsistent-acceptor'] = "This card cannot used by this Acceptor.";

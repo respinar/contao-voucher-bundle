@@ -19,7 +19,7 @@ use Respinar\ContaoVoucherBundle\Controller\FrontendModule\VoucherValidateModule
  */
 $GLOBALS['TL_LANG']['MOD']['voucher_module'] = 'Voucher Manger';
 $GLOBALS['TL_LANG']['MOD']['voucher_gift'] = ['Gifts', 'Gift Manger'];
-$GLOBALS['TL_LANG']['MOD']['voucher_card'] = ['Cards', 'Card Manger'];
+$GLOBALS['TL_LANG']['MOD']['voucher_card'] = ['Gift Cards', 'Card Manger'];
 $GLOBALS['TL_LANG']['MOD']['voucher_staff'] = ['Staffs', 'Staff Manger'];
 $GLOBALS['TL_LANG']['MOD']['voucher_acceptor'] = ['Acceptors', 'Acceptor Manger'];
 $GLOBALS['TL_LANG']['MOD']['voucher_log'] = ['Voucher logs', 'View logs'];

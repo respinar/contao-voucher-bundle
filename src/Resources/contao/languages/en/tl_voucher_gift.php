@@ -47,13 +47,9 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['status'] = ["Status", "Geben Sie einen T
  * References
  */
 $GLOBALS['TL_LANG']['tl_voucher_gift']['new'] = "New";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['send'] = "SMS sent";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['send'] = "SMS";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['expired'] = "Expired";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['confrimed'] = "Used";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['duplicate'] = "Duplicate";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['invalid'] = "Invalid";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['error'] = "Error!";
-
+$GLOBALS['TL_LANG']['tl_voucher_gift']['used'] = "Used";
 /**
  * Buttons
  */
