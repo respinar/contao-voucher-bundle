@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
     'list'        => array(
         'sorting'         => array(
             'mode'        => 1,            
-            'fields'      => array('tstamp'),
+            'fields'      => array('name'),
             'flag'        => 12,
             'panelLayout' => 'filter;search,limit'
         ),
