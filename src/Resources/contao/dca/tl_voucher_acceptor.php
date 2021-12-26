@@ -83,7 +83,7 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
     // Palettes
     'palettes'    => array(
         '__selector__' => array('addSubpalette'),
-        'default'      => '{first_legend},title,type,code;'
+        'default'      => '{first_legend},title,phone,type,code;'
     ),   
     // Fields
     'fields'      => array(
@@ -102,6 +102,16 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
             'flag'      => 1,
             'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''"
+        ),
+        'phone' => array(
+            'inputType' => 'text',
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,
+            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 14, 'tl_class' => 'w50'),
+            'sql'       => "varchar(20) NOT NULL default ''"
         ),
         'type'    => array(
             'inputType' => 'select',

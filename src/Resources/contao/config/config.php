@@ -24,6 +24,7 @@ $GLOBALS['BE_MOD']['voucher_module'] = array (
     'voucher_card' => array( 'tables'=> array('tl_voucher_card','tl_voucher_gift')),
     'voucher_staff' => array( 'tables'=> array('tl_voucher_staff')),
     'voucher_acceptor' => array( 'tables'=> array('tl_voucher_acceptor')),
+    'voucher_invocie' => array( 'tables'=> array('tl_voucher_invoice')),
     'voucher_log' => array( 'tables'=> array('tl_voucher_log'))
 );
 
@@ -34,3 +35,5 @@ $GLOBALS['TL_MODELS']['tl_voucher_card']     = VoucherCardModel::class;
 $GLOBALS['TL_MODELS']['tl_voucher_gift']     = VoucherGiftModel::class;
 $GLOBALS['TL_MODELS']['tl_voucher_staff']    = VoucherStaffModel::class;
 $GLOBALS['TL_MODELS']['tl_voucher_acceptor'] = VoucherAcceptorModel::class;
+$GLOBALS['TL_MODELS']['tl_voucher_invoice']  = VoucherInvoiceModel::class;
+$GLOBALS['TL_MODELS']['tl_voucher_log']      = VoucherLogModel::class;
