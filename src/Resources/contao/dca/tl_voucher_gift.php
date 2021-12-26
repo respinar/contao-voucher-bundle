@@ -161,7 +161,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'eval'      => array('disabled'=>false,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'expirationDate' => array
