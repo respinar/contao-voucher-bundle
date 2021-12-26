@@ -32,6 +32,8 @@ use Respinar\ContaoVoucherBundle\Model\VoucherStaffModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
 
+use Respinar\ContaoSmsBundle\Controller\sendSMSAPI;
+
 
 /**
  * Table tl_voucher_gift
@@ -271,9 +273,13 @@ class tl_voucher_gift extends Backend
 
         if ('' !== Input::get('id') && '' === Input::post('sendSMS') && 'tl_voucher_gift' === Input::post('FORM_SUBMIT') && 'auto' !== Input::post('SUBMIT_TYPE')) 
         {
-            $arrSet['status'] = "sent";
+            $sms = new sendSMSAPI();
+
+            $arrSet['status'] = "send";
+            $arrSet['note'] = $sms('09142553221','Hello!');
+            
             if($arrSet) {
-                $this->Database->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($dc->id);
+                $this->Database->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($dc->id);                
             }
         }
 
