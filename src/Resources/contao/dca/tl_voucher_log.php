@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields'      => array('tstamp','datetime','giftCode', 'acceptorID','staffID','invoice'),
+            'fields'      => array('tstamp','datetime','giftCode','acceptorCode','invoice','ip'),
             'showColumns'             => true,
 			//'label_callback'          => array('tl_voucher_log', 'titles')
         ),
@@ -59,13 +59,7 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
 				'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
 			)
         ),
-        'operations'        => array(            
-            'delete' => array
-			(
-				'href'                => 'act=delete',
-				'icon'                => 'delete.svg',
-				'attributes'          => 'onclick="if(!confirm(\'' . ($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null) . '\'))return false;Backend.getScrollOffset()"'
-			),
+        'operations'        => array(                       
 			'show' => array
 			(
 				'href'                => 'act=show',
@@ -85,12 +79,10 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ),
         'giftCode'  => array(
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
             'sql'       => "varchar(20) NOT NULL default ''"
         ),
         'acceptorCode'  => array(
+            'foreignKey' => 'tl_voucher_acceptor.title',
             'search'    => true,
             'filter'    => true,
             'sorting'   => true,          
@@ -103,33 +95,11 @@ $GLOBALS['TL_DCA']['tl_voucher_log'] = array(
             'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'invoice'  => array(
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
             'sql'       => "varchar(20) NULL default ''"
         ),
-        'acceptorID' => array(
-            'foreignKey'=> 'tl_voucher_acceptor.title',
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
-            'sql'       => "varchar(255) NULL default ''"
-        ),
-        'staffID' => array(
-            'foreignKey'=> 'tl_voucher_staff.name',
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
-            'sql'       => "varchar(255) NULL default ''"
-        ),
-        'status' => array
-		(
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
-            'reference' => $GLOBALS['TL_LANG']['tl_voucher_log'],
-			'sql'       => "char(20) NOT NULL default ''"
-		)
+        'ip' => array(
+            'sql'       => "varchar(20) NULL default ''"
+        )
     )
 );
 
@@ -158,7 +128,6 @@ class tl_voucher_log extends Backend
 
         $args[2] = $objCard->title;        
         $args[3] = $objAcceptor->title;
-        $args[4] = $objStaff->name;
 
 		return $args;
 	}
