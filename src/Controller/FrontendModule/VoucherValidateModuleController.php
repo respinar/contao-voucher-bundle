@@ -175,18 +175,18 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
 
                     
 
-                    $invoiceArrSet['giftCode']       = $giftObj->giftCode;
-                    $invoiceArrSet['cardID']         = $giftObj->pid;
-                    $invoiceArrSet['staffID']        = $giftObj->staffID;
-                    $invoiceArrSet['acceptorID']     = $acceptorObj->id;                    
-                    $invoiceArrSet['giftCredit']     = $totalCredit;
-                    $invoiceArrSet['invoice']        = $invoice;
+                    $invoiceArrSet['giftCode']     = $giftObj->giftCode;
+                    $invoiceArrSet['cardID']       = $giftObj->pid;
+                    $invoiceArrSet['staffID']      = $giftObj->staffID;
+                    $invoiceArrSet['pid']          = $acceptorObj->id;                    
+                    $invoiceArrSet['giftCredit']   = $totalCredit;
+                    $invoiceArrSet['invoice']      = $invoice;
                     $invoiceArrSet['companyShare'] = $companyShare;
                     $invoiceArrSet['staffShare']   = $staffShare;
-                    $invoiceArrSet['trackingCode']   = $trackingCode;
-                    $invoiceArrSet['tstamp']         = time();
-                    $invoiceArrSet['datetime']       = Date::parse($this->page->dateFormat,time());
-                    $invoiceArrSet['status']         = "OK";                                     
+                    $invoiceArrSet['trackingCode'] = $trackingCode;
+                    $invoiceArrSet['tstamp']       = time();
+                    $invoiceArrSet['datetime']     = Date::parse($this->page->dateFormat,time());
+                    $invoiceArrSet['status']       = "OK";                                     
 
                     $db   = Database::getInstance();
 

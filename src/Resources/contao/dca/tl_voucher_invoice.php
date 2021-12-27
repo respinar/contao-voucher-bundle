@@ -47,7 +47,7 @@ $GLOBALS['TL_DCA']['tl_voucher_invoice'] = array(
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields'      => array('tstamp','datetime','giftCode', 'acceptorID','invoice','companyShare','staffShare'),
+            'fields'      => array('tstamp','datetime','giftCode', 'pid','invoice','companyShare','staffShare'),
             'showColumns'             => true,
 			'label_callback'          => array('tl_voucher_invoice', 'titles')
         ),
@@ -72,6 +72,12 @@ $GLOBALS['TL_DCA']['tl_voucher_invoice'] = array(
         'id'             => array(
             'sql' => "int(10) unsigned NOT NULL auto_increment"
         ),
+        'pid' => array(
+            'foreignKey'=> 'tl_voucher_acceptor.title',
+            'search'    => true,
+            'filter'    => true,
+            'sql'       => "int(10) unsigned NOT NULL"
+        ),
         'tstamp'         => array(
             'filter'                  => true,
 			'sorting'                 => true,
@@ -89,43 +95,37 @@ $GLOBALS['TL_DCA']['tl_voucher_invoice'] = array(
         ),
         'giftCredit'  => array(
             'sorting'   => true,
-            'sql'       => "varchar(20) NULL default ''"
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'invoice'  => array(
             'sorting'   => true,
-            'sql'       => "varchar(20) NULL default ''"
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'staffShare'  => array(
             'search'    => true,
             'sorting'   => true,
-            'sql'       => "varchar(20) NULL default ''"
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),       
         'companyShare'  => array(
             'search'    => true,
             'sorting'   => true,
-            'sql'       => "varchar(20) NULL default ''"
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'trackingCode'  => array(            
             'search'    => true,
-            'sql'       => "int(10) unsigned NULL"
-        ),     
-        'acceptorID' => array(
-            'foreignKey'=> 'tl_voucher_acceptor.title',
-            'search'    => true,
-            'filter'    => true,
-            'sql'       => "varchar(255) NULL default ''"
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'staffID' => array(
             'foreignKey'=> 'tl_voucher_staff.name',
             'search'    => true,
             'filter'    => true,
-            'sql'       => "varchar(255) NULL default ''"
+            'sql'       => "int(10) unsigned NULL"
         ),
         'cardID' => array(
             'foreignKey'=> 'tl_voucher_card.title',
             'search'    => true,
             'filter'    => true,
-            'sql'       => "varchar(255) NULL default ''"
+            'sql'       => "int(10) unsigned NULL"
         ),
         'status' => array
 		(
@@ -156,7 +156,7 @@ class tl_voucher_invoice extends Backend
 	public function titles($row, $label, DataContainer $dc, $args)
 	{
         
-        $objAcceptor = VoucherAcceptorModel::findBy('id',$row['acceptorID']);        
+        $objAcceptor = VoucherAcceptorModel::findBy('id',$row['pid']);        
 
         $args[3] = $objAcceptor->title;
 
