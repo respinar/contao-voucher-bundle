@@ -15,8 +15,9 @@ declare(strict_types=1);
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_voucher_gift']['gift_legend'] = "Voucher detail";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['detail_legend'] = "Confrimation detail";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['gift_legend'] = "Gift detail";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['staff_legend'] = "Staff";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['status_legend'] = "Status";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['note_legend'] = "Note";
 
 /**

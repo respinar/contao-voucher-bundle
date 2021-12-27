@@ -36,6 +36,7 @@ use Respinar\ContaoVoucherBundle\Model\VoucherAcceptorModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherStaffModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherInvoiceModel;
 
 
 /**
@@ -132,7 +133,7 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
                 {
                     $staffObj = VoucherStaffModel::findBy('id',$giftObj->staffID);
 
-                    $totalCredit = $giftObj->giftQty * $giftObj->giftCredit;
+                    $totalCredit = $giftObj->totalCredit;
 
                     $template->staffName = $staffObj->name;
                     $template->acceptorTitle = $acceptorObj->title;
@@ -148,14 +149,21 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
                     $template->invoice = $invoice;
 
                     
-                    $balance = ($invoice > $totalCredit) ? $invoice - $totalCredit : 0;
+                    $staffShare = ($invoice > $totalCredit) ? $invoice - $totalCredit : 0;
+
+                    $companyShare = ($invoice > $totalCredit) ? $totalCredit : $invoice;
+
+                    $residualCredit = ($invoice > $totalCredit) ? 0 : $totalCredit - $invoice;
+
                     
-                    $template->balance = $balance;
+                    
+                    $template->staffShare = $staffShare;
+                    $template->companyShare = $companyShare;
 
                     while (true)
                     {
                         $trackingCode = rand(10000000,99999999);
-                        $trackingObj = VoucherGiftModel::findBy('trackingCode',$trackingCode);
+                        $trackingObj = VoucherInvoiceModel::findBy('trackingCode',$trackingCode);
 
                         if (!$trackingObj)
                         {                            
@@ -165,15 +173,31 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
 
                     $template->trackingCode = $trackingCode;
 
-                    $arrSet['acceptorID'] = $acceptorObj->id;
-                    $arrSet['invoice'] = $invoice;
-                    $arrSet['balance'] = $balance;
-                    $arrSet['trackingCode'] = $trackingCode;
-                    $arrSet['datetime'] = time();
-                    $arrSet['status'] = "used";
+                    
+
+                    $invoiceArrSet['giftCode']       = $giftObj->giftCode;
+                    $invoiceArrSet['cardID']         = $giftObj->pid;
+                    $invoiceArrSet['staffID']        = $giftObj->staffID;
+                    $invoiceArrSet['acceptorID']     = $acceptorObj->id;                    
+                    $invoiceArrSet['giftCredit']     = $totalCredit;
+                    $invoiceArrSet['invoice']        = $invoice;
+                    $invoiceArrSet['companyShare'] = $companyShare;
+                    $invoiceArrSet['staffShare']   = $staffShare;
+                    $invoiceArrSet['trackingCode']   = $trackingCode;
+                    $invoiceArrSet['tstamp']         = time();
+                    $invoiceArrSet['datetime']       = Date::parse($this->page->dateFormat,time());
+                    $invoiceArrSet['status']         = "OK";                                     
 
                     $db   = Database::getInstance();
-                    $stmt = $db->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($giftObj->id);
+
+                    $stmt = $db->prepare("INSERT tl_voucher_invoice %s")->set($invoiceArrSet)->execute();
+
+                    $giftArrSet['status'] = "used";
+                    $giftArrSet['residualCredit'] = $residualCredit;  
+
+                    $stmt = $db->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($giftArrSet)->execute($giftObj->id);
+
+                    
         
                 }
             }

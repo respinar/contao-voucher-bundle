@@ -14,9 +14,6 @@ declare(strict_types=1);
 
 namespace Respinar\ContaoVoucherBundle\Model;
 
-use Respinar\ContaoVoucherBundle\Model\AcceptorModel;
-
-
 use Contao\Model;
 
 /**

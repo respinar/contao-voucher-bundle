@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{staff_legend},staffID,occasion;{gift_legend},giftCode,expirationDate,giftCredit,giftQty;{confrim_legend},acceptorID,invoice,datetime,trackingCode,status;{note_legend:hide},note'
+        'default'      => '{staff_legend},staffID,occasion;{gift_legend},giftCode,giftCredit,giftQty,totalCredit,expirationDate;{status_legend},status,residualCredit;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -163,7 +163,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('disabled'=>false,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'eval'      => array('disabled'=>false,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50 clr'),
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'expirationDate' => array
@@ -175,16 +175,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
 			'eval'      => array('rgxp'=>'date', 'doNotCopy'=>true, 'datepicker'=>true, 'tl_class'=>'w50 wizard'),			
 			'sql'       => "int(10) unsigned NULL"
 		),
-        'datetime'          => array(
-            'inputType' => 'text',
-            'exclude'   => true,
-            'search'    => true,            
-            'sorting'   => true,
-            'flag'      => 1,
-            'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
-            'sql'       => "varchar(255) NOT NULL default ''"
-        ),
-        'invoice'  => array(
+        'totalCredit'  => array(
             'inputType' => 'text',
             'exclude'   => true,
             'search'    => true,            
@@ -193,7 +184,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 20, 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NULL"
         ),
-        'balance'  => array(
+        'residualCredit'  => array(
             'inputType' => 'text',
             'exclude'   => true,
             'search'    => true,            
@@ -202,36 +193,15 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 20, 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NULL"
         ),
-        'acceptorID' => array(
-            'inputType' => 'select',
-            'foreignKey'=> 'tl_voucher_acceptor.title',            
-            'exclude'   => true,
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
-            'flag'      => 1,            
-            'eval'      => array('disabled'=>true,'multiple'=>false, 'includeBlankOption'=>true, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_acceptor', 'titleField'=>'title', 'tl_class' => 'w50'),
-            'relation'  => array('type'=>'belongsTo', 'load'=>'lazy'),
-            'sql'       => "int(10) unsigned NULL"
-        ),  
-        'trackingCode'  => array(
-            'inputType' => 'text',
-            'exclude'   => true,
-            'search'    => true,            
-            'sorting'   => true,
-            'flag'      => 1,
-            'eval'      => array('disabled'=>true,'mandatory' => false, 'maxlength' => 20, 'tl_class' => 'w50'),
-            'sql'       => "int(10) unsigned NULL"
-        ),     
         'status' => array
 		(
-            'inputType' => 'select',
+            'inputType' => 'text',
             'default'   => 'new',
             'filter'    => 'true',
 			'exclude'   => true,
 			'inputType' => 'select',
-            'reference' => $GLOBALS['TL_LANG']['tl_voucher_gift'],
-            'options'   => array('new','sent','uesd','expired'),
+            'reference' => &$GLOBALS['TL_LANG']['tl_voucher_gift'],
+            'options'   => array('new','sent','used','expired'),
 			'eval'      => array('readonly'=>true,'tl_class'=>'w50'),
 			'sql'       => "char(10) NOT NULL default ''"
 		),    
@@ -273,7 +243,7 @@ class tl_voucher_gift extends Backend
 
         if ('' !== Input::get('id') && '' === Input::post('sendSMS') && 'tl_voucher_gift' === Input::post('FORM_SUBMIT') && 'auto' !== Input::post('SUBMIT_TYPE')) 
         {
-            $sms = new sendSMSAPI();
+            //$sms = new sendSMSAPI();
 
             $arrSet['status'] = "send";
             $arrSet['note'] = $sms('09142553221','Hello!');
@@ -346,6 +316,8 @@ class tl_voucher_gift extends Backend
                 }                
             }
         }
+
+        $arrSet['totalCredit'] = $dc->activeRecord->giftCredit * $dc->activeRecord->giftQty;
 
         
         

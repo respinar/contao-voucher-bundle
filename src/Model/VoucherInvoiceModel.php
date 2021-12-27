@@ -17,13 +17,13 @@ namespace Respinar\ContaoVoucherBundle\Model;
 use Contao\Model;
 
 /**
- * Class VoucherLogModel
+ * Class VoucherInvoiceModel
  *
  * @package Respinar\ContaoVoucherBundle\Model
  */
-class VoucherLogModel extends Model
+class VoucherInvoiceModel extends Model
 {
-    protected static $strTable = 'tl_voucher_log';
+    protected static $strTable = 'tl_voucher_invoice';
 
 }
 

@@ -15,8 +15,9 @@
         <p>اعتبار کل:‌ <?= $this->totalCredit; ?></p>
         <p>تاریخ اعتبار:‌ <?= $this->expirationDate; ?></p>
         <br>
-        <p>مبلغ کل فاکتور:‌ <?= $this->invoice; ?></p>
-        <p>مبلغ قابل دریافت:‌ <?= $this->balance; ?></p>
+        <p>مبلغ کل فاکتور:‌ <?= $this->invoice; ?></p>        
+        <p>مبلغ تعهدشده شرکت:‌ <?= $this->companyShare; ?></p>
+        <p>مبلغ قابل دریافت:‌ <?= $this->staffShare; ?></p>
 
         <p>کد رهگیری: <?= $this->trackingCode; ?></p>
 
