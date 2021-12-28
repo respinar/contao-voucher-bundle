@@ -32,7 +32,7 @@ use Respinar\ContaoVoucherBundle\Model\VoucherStaffModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherGiftModel;
 
-use Respinar\ContaoSmsBundle\Controller\sendSMSAPI;
+use Respinar\ContaoVoucherBundle\Controller\SendSMS;
 
 
 /**
@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
         'onsubmit_callback'       => array
         (
             array('tl_voucher_gift', 'adjustGift'),
-            array('tl_voucher_gift', 'sendSMS')
+            array('tl_voucher_gift', 'sendSMStoStaff')
         )
     ),
     'edit'        => array(
@@ -237,16 +237,20 @@ class tl_voucher_gift extends Backend
      *
      * @throws Exception
      */
-    public function sendSMS(DataContainer $dc): void
+    public function sendSMStoStaff(DataContainer $dc): void
     {
         //$dc->activeRecord->status = "send";
 
-        if ('' !== Input::get('id') && '' === Input::post('sendSMS') && 'tl_voucher_gift' === Input::post('FORM_SUBMIT') && 'auto' !== Input::post('SUBMIT_TYPE')) 
+        if ('' !== Input::get('id') && '' === Input::post('sendSMStoStaff') && 'tl_voucher_gift' === Input::post('FORM_SUBMIT') && 'auto' !== Input::post('SUBMIT_TYPE')) 
         {
-            //$sms = new sendSMSAPI();
+
+            $staffObj = VoucherStaffModel::findBy('id',$dc->activeRecord->staffID);
+
+            $sms = new SendSMS($staffObj->gatewayID);
+
 
             $arrSet['status'] = "send";
-            $arrSet['note'] = $sms('09142553221','Hello!');
+            $arrSet['note'] = $sms($staffObj->phone,'Hello!');
             
             if($arrSet) {
                 $this->Database->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($dc->id);                
@@ -265,7 +269,7 @@ class tl_voucher_gift extends Backend
     {
         if (Input::get('act') === 'edit')
         {
-            $arrButtons['sendSMS'] = '<button type="submit" name="sendSMS" id="sendSMS" class="tl_submit sendSMS">' . $GLOBALS['TL_LANG']['tl_voucher_gift']['sendSMS'] . '</button>';
+            $arrButtons['sendSMS'] = '<button type="submit" name="sendSMStoStaff" id="sendSMStoStaff" class="tl_submit sendSMS">' . $GLOBALS['TL_LANG']['tl_voucher_gift']['sendSMS'] . '</button>';
         }
 
         return $arrButtons;

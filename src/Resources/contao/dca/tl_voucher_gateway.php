@@ -17,25 +17,21 @@ use Contao\DC_Table;
 use Contao\Input;
 
 /**
- * Table tl_voucher_acceptor
+ * Table tl_voucher_gateway
  */
-$GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
+$GLOBALS['TL_DCA']['tl_voucher_gateway'] = array(
 
     // Config
     'config'      => array(
         'dataContainer'    => 'Table',
         'enableVersioning' => true,
+        'notCopyable'      => true,  
         'sql'              => array(
             'keys' => array(
                 'id' => 'primary'
             )
         ),
-    ),
-    'edit'        => array(
-        'buttons_callback' => array(
-            array('tl_voucher_acceptor', 'buttonsCallback')
-        )
-    ),
+    ),   
     'list'        => array(
         'sorting'         => array(
             'mode'        => 2,
@@ -44,7 +40,7 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields' => array('title','type','code'),
+            'fields' => array('title','number'),
             'showColumns'             => true
         ),
         'global_operations' => array(
@@ -57,23 +53,18 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
         ),
         'operations'        => array(
             'edit'   => array(
-                'label' => &$GLOBALS['TL_LANG']['tl_voucher_acceptor']['edit'],
+                'label' => &$GLOBALS['TL_LANG']['tl_voucher_gateway']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif'
-            ),/*
-            'copy'   => array(
-                'label' => &$GLOBALS['TL_LANG']['tl_voucher_acceptor']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.gif'
-            ),*/
+            ),
             'delete' => array(
-                'label'      => &$GLOBALS['TL_LANG']['tl_voucher_acceptor']['delete'],
+                'label'      => &$GLOBALS['TL_LANG']['tl_voucher_gateway']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
             ),
             'show'   => array(
-                'label'      => &$GLOBALS['TL_LANG']['tl_voucher_acceptor']['show'],
+                'label'      => &$GLOBALS['TL_LANG']['tl_voucher_gateway']['show'],
                 'href'       => 'act=show',
                 'icon'       => 'show.gif',
                 'attributes' => 'style="margin-right:3px"'
@@ -82,8 +73,7 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        '__selector__' => array('addSubpalette'),
-        'default'      => '{first_legend},title,type,code;{notification_legend},phone,gatewayID'
+        'default'      => '{title_legend},title;{config_legend},gateway,fromNumber,username,password;'
     ),   
     // Fields
     'fields'      => array(
@@ -95,62 +85,42 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
         ),
         'title'          => array(
             'inputType' => 'text',
-            'exclude'   => true,
             'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
             'flag'      => 1,
             'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "varchar(255) NOT NULL default ''"
         ),
-        'phone' => array(
+        'gateway' => array(
             'inputType' => 'text',
-            'exclude'   => true,
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 14, 'tl_class' => 'w50'),
-            'sql'       => "varchar(20) NOT NULL default ''"
+            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
-        'gatewayID' => array(
-            'inputType' => 'select',
-            'foreignKey'=> 'tl_voucher_gateway.title',
-            'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'includeBlankOption'=>true, 'multiple'=>false, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_gateway', 'tl_class' => 'w50'),
-            'sql'       => "varchar(20) NOT NULL default ''"
-        ),
-        'type'    => array(
-            'inputType' => 'select',
-            'exclude'   => true,
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
-            'reference' => $GLOBALS['TL_LANG']['tl_voucher_acceptor'],
-            'options'   => array('food', 'book','pool'),
-            //'foreignKey'            => 'tl_user.name',
-            //'options_callback'      => array('CLASS', 'METHOD'),
-            'eval'      => array('includeBlankOption' => true, 'tl_class' => 'w50'),
-            'sql'       => "varchar(255) NOT NULL default ''",
-            //'relation'  => array('type' => 'hasOne', 'load' => 'lazy')
-        ),        
-        'code'  => array(
+        'fromNumber'  => array(
             'inputType' => 'text',
-            'exclude'   => true,
-            'search'    => true,
-            'filter'    => true,
-            'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 4, 'tl_class' => 'w50'),
-            'sql'       => "varchar(4) NOT NULL default ''"
+            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 50, 'tl_class' => 'w50'),
+            'sql'       => "varchar(255) NOT NULL default ''"
+        ),
+        'username'  => array(
+            'inputType' => 'text',
+            'flag'      => 1,
+            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 50, 'tl_class' => 'w50'),
+            'sql'       => "varchar(255) NOT NULL default ''"
+        ),
+        'password'  => array(
+            'inputType' => 'text',
+            'flag'      => 1,
+            'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 50, 'tl_class' => 'w50'),
+            'sql'       => "varchar(255) NOT NULL default ''"
         )
     )
 );
 
 /**
- * Class tl_voucher_acceptor
+ * Class tl_voucher_gateway
  */
-class tl_voucher_acceptor extends Backend
+class tl_voucher_gateway extends Backend
 {
     /**
      * @param $arrButtons
@@ -161,7 +131,7 @@ class tl_voucher_acceptor extends Backend
     {
         if (Input::get('act') === 'edit')
         {
-            $arrButtons['customButton'] = '<button type="submit" name="customButton" id="customButton" class="tl_submit customButton" accesskey="x">' . $GLOBALS['TL_LANG']['tl_voucher_acceptor']['customButton'] . '</button>';
+            $arrButtons['customButton'] = '<button type="submit" name="customButton" id="customButton" class="tl_submit customButton" accesskey="x">' . $GLOBALS['TL_LANG']['tl_voucher_gateway']['customButton'] . '</button>';
         }
 
         return $arrButtons;

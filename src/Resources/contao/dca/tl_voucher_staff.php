@@ -67,7 +67,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{staff_legend},name,employeeID,phone,familyMembers;{note_legend:hide},note'
+        'default'      => '{staff_legend},name,employeeID,phone,familyMembers;{notification_legend},phone,gatewayID;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -106,6 +106,13 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'sorting'   => true,
             'flag'      => 1,
             'eval'      => array('mandatory' => true, 'unique'=>true, 'maxlength' => 14, 'tl_class' => 'w50'),
+            'sql'       => "varchar(20) NOT NULL default ''"
+        ),
+        'gatewayID' => array(
+            'inputType' => 'select',
+            'foreignKey'=> 'tl_voucher_gateway.title',
+            'flag'      => 1,
+            'eval'      => array('mandatory' => true, 'includeBlankOption'=>true, 'multiple'=>false, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_gateway', 'tl_class' => 'w50'),
             'sql'       => "varchar(20) NOT NULL default ''"
         ),
         'familyMembers'    => array(
