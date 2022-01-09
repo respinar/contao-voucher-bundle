@@ -41,12 +41,12 @@ class SendSMS
         $sms_client = new SoapClient($this->sms_gateway, array('encoding'=>'UTF-8'));
 
         try {
-            $parameters['userName'] = $this->sms_username;
-            $parameters['password'] = $this->sms_password;
+            $parameters['userName'] = "t.09142336948";//$this->sms_username;
+            $parameters['password'] = "ooz#462";//$this->sms_password;
             $parameters['fromNumber'] = $this->sms_fromNumber;
             $parameters['toNumbers'] = array($toNumber);
             $parameters['messageContent'] = $message;
-            $parameters['isFlash'] = false;
+            $parameters['isFlash'] = true;
             $recId = array();
             $status = array();
             $parameters['recId'] = &$recId ;
