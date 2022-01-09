@@ -67,7 +67,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{staff_legend},name,employeeID,phone,familyMembers;{notification_legend},phone,gatewayID;{note_legend:hide},note'
+        'default'      => '{staff_legend},name,employeeID,familyMembers;{notification_legend},phone,gatewayID;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
