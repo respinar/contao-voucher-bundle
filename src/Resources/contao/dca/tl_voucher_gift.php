@@ -69,7 +69,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'panelLayout' => 'filter;sort,search,limit'
         ),
         'label'             => array(
-            'fields' => array('tstamp','giftCode','giftQty','staffID', 'expirationDate','status'),
+            'fields' => array('tstamp','giftCode','giftQty','staffID', 'expirationDate','deliveryStatus','status'),
             'showColumns'             => true,
             'label_callback'          => array('tl_voucher_gift', 'titles')
         ),
@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{staff_legend},staffID,occasion;{gift_legend},giftCode,giftCredit,giftQty,totalCredit,expirationDate;{status_legend},status,residualCredit;{note_legend:hide},note'
+        'default'      => '{staff_legend},staffID,occasion;{gift_legend},giftCode,giftCredit,giftQty,totalCredit,expirationDate;{status_legend},status,residualCredit,deliveryStatus;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -201,10 +201,20 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
 			'exclude'   => true,
 			'inputType' => 'select',
             'reference' => &$GLOBALS['TL_LANG']['tl_voucher_gift'],
-            'options'   => array('new','sent','used','expired'),
+            'options'   => array('new','used','expired'),
 			'eval'      => array('readonly'=>true,'tl_class'=>'w50'),
 			'sql'       => "char(10) NOT NULL default ''"
-		),    
+		),
+        'deliveryStatus' => array
+		(
+            'inputType' => 'text',
+            'default'   => '0',
+            'filter'    => 'true',
+			'exclude'   => true,
+            'reference' => &$GLOBALS['TL_LANG']['tl_voucher_gift'],            
+			'eval'      => array('readonly'=>true,'tl_class'=>'w50'),
+			'sql'       => "varchar(3) NOT NULL default ''"
+		),
         'occasion' => array(
             'inputType' => 'text',
             'exclude'   => true,
@@ -248,9 +258,7 @@ class tl_voucher_gift extends Backend
 
             $sms = new SendSMS($staffObj->gatewayID);
 
-
-            $arrSet['status'] = "send";
-            $arrSet['note'] = $sms($staffObj->phone,'Hello!');
+            $arrSet['deliveryStatus'] = $sms($staffObj->phone,'حمید عباس‌زاده عزیز، کارت هدیه با کد 602547 برای شما صادر شد.');
             
             if($arrSet) {
                 $this->Database->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($dc->id);                
