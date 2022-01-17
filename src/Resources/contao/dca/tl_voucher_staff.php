@@ -113,7 +113,7 @@ $GLOBALS['TL_DCA']['tl_voucher_staff'] = array(
             'foreignKey'=> 'tl_voucher_gateway.title',
             'flag'      => 1,
             'eval'      => array('mandatory' => true, 'includeBlankOption'=>true, 'multiple'=>false, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_gateway', 'tl_class' => 'w50'),
-            'sql'       => "varchar(20) NOT NULL default ''"
+            'sql'       => "int(10) unsigned NULL"
         ),
         'familyMembers'    => array(
             'inputType' => 'select',
