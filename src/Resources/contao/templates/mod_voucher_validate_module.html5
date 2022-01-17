@@ -9,17 +9,15 @@
         <p>نام مشتری:‌ <?= $this->staffName; ?></p>
         <br>
         <p>عنوان کارت هدیه:‌ <?= $this->giftTitle; ?></p>
-        <p>کد کارت هدیه:‌ <?= $this->giftCode; ?></p>
-        <p>تعداد کارت هدیه:‌ <?= $this->giftQty; ?></p>
-        <p>اعتبار هر کارت:‌ <?= $this->giftCredit; ?></p>
-        <p>اعتبار کل:‌ <?= $this->totalCredit; ?></p>
+        <p>کد کارت هدیه:‌ <?= $this->giftCode; ?></p>        
+        <p>اعتبار کارت:‌ <?= $this->totalCredit; ?> تومان</p>
         <p>تاریخ اعتبار:‌ <?= $this->expirationDate; ?></p>
         <br>
-        <p>مبلغ کل فاکتور:‌ <?= $this->invoice; ?></p>        
-        <p>مبلغ تعهدشده شرکت:‌ <?= $this->companyShare; ?></p>
-        <p>مبلغ قابل دریافت:‌ <?= $this->staffShare; ?></p>
+        <p>مبلغ کل فاکتور:‌ <?= $this->invoice; ?> تومان</p>        
+        <p>مبلغ تعهدشده شرکت:‌ <?= $this->companyShare; ?> تومان</p>
+        <p>مبلغ قابل دریافت:‌ <?= $this->staffShare; ?> تومان</p>
 
-        <p>کد رهگیری: <?= $this->trackingCode; ?></p>
+        <p>کد پیگیری: <?= $this->trackingCode; ?></p>
 
         
 
