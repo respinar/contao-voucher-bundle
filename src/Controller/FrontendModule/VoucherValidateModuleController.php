@@ -38,6 +38,9 @@ use Respinar\ContaoVoucherBundle\Model\VoucherStaffModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherCardModel;
 use Respinar\ContaoVoucherBundle\Model\VoucherInvoiceModel;
 
+use Respinar\ContaoVoucherBundle\Controller\SendSMS;
+
+
 
 /**
  * Class VoucherValidateModuleController
@@ -140,13 +143,13 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
 
                     $template->giftTitle = $cardObj->title;
                     $template->giftCode = $giftCode;
-                    $template->giftCredit = $giftObj->giftCredit;
+                    $template->giftCredit = number_format( (float) $giftObj->giftCredit,0,'.',',');
                     $template->giftQty = $giftObj->giftQty;
 
                     $template->expirationDate = Date::parse($this->page->dateFormat,$giftObj->expirationDate);
 
-                    $template->totalCredit = $totalCredit;
-                    $template->invoice = $invoice;
+                    $template->totalCredit = number_format( (float) $totalCredit,0,'.',',');
+                    $template->invoice = number_format( (float) $invoice,0,'.',',');
 
                     
                     $staffShare = ($invoice > $totalCredit) ? $invoice - $totalCredit : 0;
@@ -157,8 +160,8 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
 
                     
                     
-                    $template->staffShare = $staffShare;
-                    $template->companyShare = $companyShare;
+                    $template->staffShare = number_format( (float) $staffShare,0,'.',',');
+                    $template->companyShare = number_format( (float) $companyShare,0,'.',',');
 
                     while (true)
                     {
@@ -190,14 +193,32 @@ class VoucherValidateModuleController extends AbstractFrontendModuleController
 
                     $db   = Database::getInstance();
 
-                    $stmt = $db->prepare("INSERT tl_voucher_invoice %s")->set($invoiceArrSet)->execute();
+                    $stmt = $db->prepare("INSERT tl_voucher_invoice %s")->set($invoiceArrSet)->execute();                 
+
 
                     $giftArrSet['status'] = "used";
                     $giftArrSet['residualCredit'] = $residualCredit;  
 
                     $stmt = $db->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($giftArrSet)->execute($giftObj->id);
 
+                    // sms to Staff
+                    $smsStaff = new SendSMS( (int) $staffObj->gatewayID);
+
+                    $smsStaffFormat = "%s عزیز\nمبلغ %s از اعتبار کارت هدیه کد %s توسط %s ثبت شد.\nصورتحساب: %s تومان\nمبلغ قابل پرداخت: %s تومان\nکد پیگیری:‌ %s\nهلدینگ سافا";
+            
+                    $smsStaffMessage = sprintf($smsStaffFormat, $staffObj->name, number_format( (float) $companyShare,0,'.',','), $giftObj->giftCode, $acceptorObj->title, number_format( (float) $invoice,0,'.',','), number_format( (float) $staffShare,0,'.',','), $trackingCode);
+
+                    $smsStaffDeliveryStatus = $smsStaff($staffObj->phone,$smsStaffMessage);
                     
+
+                    // SMS to 
+                    $smsAcceptor = new SendSMS( (int) $acceptorObj->gatewayID);
+
+                    $smsAcceptorFormat = "%s\nمبلغ %s از اعتبار کارت هدیه کد %s برای شما ثبت شد.\nصورتحساب: %s تومان\nمبلغ قابل دریافت:‌ %s تومان\nکد پیگیری:‌ %s\nهدلینگ سافا";
+             
+                    $smsAcceptorMessage = sprintf($smsAcceptorFormat, $acceptorObj->title, number_format( (float) $companyShare,0,'.',','), $giftObj->giftCode, number_format( (float) $invoice,0,'.',','), number_format( (float) $staffShare,0,'.',','), $trackingCode);
+
+                    $smsAcceptorDeliveryStatus = $smsAcceptor($acceptorObj->phone,$smsAcceptorMessage);
         
                 }
             }
