@@ -71,7 +71,7 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{card_legend},title,type,credit,expiration,single;{note_legend:hide},note'
+        'default'      => '{card_legend},title,type,credit,expiration,single;{sms_legend},smsGatewayID;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -140,7 +140,24 @@ $GLOBALS['TL_DCA']['tl_voucher_card'] = array(
             'sorting'   => true,
             'eval'      => array('rte' => 'tinyMCE', 'tl_class' => 'clr'),
             'sql'       => 'text NULL'
-        )
+        ),
+        'smsGatewayID'          => array(
+            'inputType' => 'select',
+            'foreignKey'=> 'tl_voucher_sms_gateway.title',            
+            'exclude'   => true,
+            'search'    => true,
+            'filter'    => true,
+            'sorting'   => true,
+            'flag'      => 1,            
+            'eval'      => array('chosen'=>true, 'mandatory'=>true, 'includeBlankOption'=>true,'multiple'=>false, 'submitOnChange'=>true, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_sms_gateway', 'titleField'=>'title', 'tl_class' => 'w50'),
+            'relation'  => array('type'=>'belongsTo', 'load'=>'lazy'),
+            'sql'       => "varchar(255) NULL default ''"
+        ),
+        'smsFormat'  => array(
+            'inputType' => 'textarea',                                
+            'eval'      => array('tl_class' => 'clr'),
+            'sql'       => 'text NULL'
+        ),
     )
 );
 
