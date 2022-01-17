@@ -115,9 +115,9 @@ $GLOBALS['TL_DCA']['tl_voucher_acceptor'] = array(
         ),
         'gatewayID' => array(
             'inputType' => 'select',
-            'foreignKey'=> 'tl_voucher_gateway.title',
+            'foreignKey'=> 'tl_voucher_sms_gateway.title',
             'flag'      => 1,
-            'eval'      => array('mandatory' => true, 'includeBlankOption'=>true, 'multiple'=>false, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_gateway', 'tl_class' => 'w50'),
+            'eval'      => array('mandatory' => true, 'includeBlankOption'=>true, 'multiple'=>false, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_sms_gateway', 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NULL"
         ),
         'type'    => array(
