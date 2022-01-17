@@ -25,7 +25,7 @@ class SendSMS
     public function __construct(int $id)
     {
 
-        $gateWayObj = VoucherGatewayModel::findBy('id',$id);
+        $gateWayObj = VoucherSMSGatewayModel::findBy('id',$id);
         
         $this->sms_gateway    =  $gateWayObj->gateway;
         $this->sms_fromNumber =  $gateWayObj->fromNumber;
