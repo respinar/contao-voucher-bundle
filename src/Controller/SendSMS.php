@@ -13,9 +13,9 @@ declare(strict_types=1);
  */
 
 namespace Respinar\ContaoVoucherBundle\Controller;
-
+use Contao\Database;
 use SoapClient;
-use Respinar\ContaoVoucherBundle\Model\VoucherGatewayModel;
+use Respinar\ContaoVoucherBundle\Model\VoucherSMSGatewayModel;
 
 /**
  * Class BundleMaker.
@@ -52,7 +52,19 @@ class SendSMS
             $parameters['recId'] = &$recId ;
             $parameters['status'] = &$status ;
 
-            $status = $sms_client->SendSMS($parameters)->SendSMSResult;            
+            $status = $sms_client->SendSMS($parameters)->SendSMSResult;
+            
+
+            // Log sended SMS
+            $smsArrSet['tstamp']     = time();
+            $smsArrSet['toNumber']   = $toNumber;
+            $smsArrSet['fromNumber'] = $this->sms_fromNumber;
+            $smsArrSet['message']    = $message;
+            $smsArrSet['status']     = $status;
+            
+            $db   = Database::getInstance();
+            $stmt = $db->prepare("INSERT tl_voucher_sms_log %s")->set($smsArrSet)->execute();
+
         }
 
         catch (Exception $e) 
