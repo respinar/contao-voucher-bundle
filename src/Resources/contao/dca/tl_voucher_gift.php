@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
     ),
     // Palettes
     'palettes'    => array(
-        'default'      => '{staff_legend},staffID,occasion;{gift_legend},giftCode,giftCredit,giftQty,totalCredit,expirationDate;{status_legend},status,residualCredit,deliveryStatus;{note_legend:hide},note'
+        'default'      => '{staff_legend},staffID,occasion;{gift_legend},giftCode,deliveryStatus,giftCredit,giftQty,totalCredit,expirationDate;{status_legend},status,residualCredit;{note_legend:hide},note'
     ),   
     // Fields
     'fields'      => array(
@@ -135,6 +135,14 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'eval'      => array('chosen'=>true, 'mandatory'=>true, 'includeBlankOption'=>true,'multiple'=>false, 'submitOnChange'=>true, 'fieldType'=>'select', 'foreignTable'=>'tl_voucher_staff', 'titleField'=>'name', 'tl_class' => 'w50'),
             'relation'  => array('type'=>'belongsTo', 'load'=>'lazy'),
             'sql'       => "varchar(255) NULL default ''"
+        ),
+        'occasion' => array(
+            'inputType' => 'text',
+            'exclude'   => true,
+            'search'    => true,            
+            'sorting'   => true,
+            'eval'      => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'giftQty'  => array(
             'inputType' => 'text',
@@ -163,7 +171,7 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
             'filter'    => true,
             'sorting'   => true,
             'flag'      => 1,
-            'eval'      => array('disabled'=>false,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50 clr'),
+            'eval'      => array('disabled'=>false,'mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'expirationDate' => array
@@ -208,21 +216,13 @@ $GLOBALS['TL_DCA']['tl_voucher_gift'] = array(
         'deliveryStatus' => array
 		(
             'inputType' => 'text',
-            'default'   => '0',
+            'default'   => '99',
             'filter'    => 'true',
 			'exclude'   => true,
             'reference' => &$GLOBALS['TL_LANG']['tl_voucher_gift'],            
 			'eval'      => array('readonly'=>true,'tl_class'=>'w50'),
 			'sql'       => "varchar(3) NOT NULL default ''"
-		),
-        'occasion' => array(
-            'inputType' => 'text',
-            'exclude'   => true,
-            'search'    => true,            
-            'sorting'   => true,
-            'eval'      => array('mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
-            'sql'       => "varchar(255) NOT NULL default ''"
-        ),
+		), 
         'note'  => array(
             'inputType' => 'textarea',
             'exclude'   => true,
@@ -256,9 +256,15 @@ class tl_voucher_gift extends Backend
 
             $staffObj = VoucherStaffModel::findBy('id',$dc->activeRecord->staffID);
 
-            $sms = new SendSMS($staffObj->gatewayID);
+            $cardObj = VoucherCardModel::findBy('id',$dc->activeRecord->pid);
 
-            $arrSet['deliveryStatus'] = $sms($staffObj->phone,'حمید عباس‌زاده عزیز، کارت هدیه با کد 602547 برای شما صادر شد.');
+            $sms = new SendSMS( (int) $staffObj->gatewayID);
+
+            $format = "%s عزیز\nبا سلام، کارت هدیه %s کد %s به مناسبت %s با اعتبار %s تومان برای شما صادر شد.\nهلدینگ سافا";
+            
+            $message = sprintf($format, $staffObj->name, $cardObj->title, $dc->activeRecord->giftCode, $dc->activeRecord->occasion, number_format( (float) $dc->activeRecord->totalCredit,0,'.',','));
+
+            $arrSet['deliveryStatus'] = $sms($staffObj->phone,$message);
             
             if($arrSet) {
                 $this->Database->prepare("UPDATE tl_voucher_gift %s WHERE id=?")->set($arrSet)->execute($dc->id);                
