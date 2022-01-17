@@ -27,6 +27,7 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['edit'] = ["Datensatz mit ID: %s bearbeit
 $GLOBALS['TL_LANG']['tl_voucher_gift']['copy'] = ["Datensatz mit ID: %s kopieren", "Datensatz mit ID: %s kopieren"];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['delete'] = ["Datensatz mit ID: %s löschen", "Datensatz mit ID: %s löschen"];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['show'] = ["Datensatz mit ID: %s ansehen", "Datensatz mit ID: %s ansehen"];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['new'] = ["New Gift", "Create New Gift Card"];
 
 /**
  * Fields
@@ -43,6 +44,7 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['acceptorID'] = ["Acceptor", "Geben Sie e
 $GLOBALS['TL_LANG']['tl_voucher_gift']['expirationDate'] = ["Expiration Date", "Hier können Sie die erweiterten Einstellungen aktivieren."];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['invoice'] = ["Invoice", "Wählen Sie aus."];
 $GLOBALS['TL_LANG']['tl_voucher_gift']['status'] = ["Status", "Geben Sie einen Text ein"];
+$GLOBALS['TL_LANG']['tl_voucher_gift']['deliveryStatus'] = ["SMS Status", "Geben Sie einen Text ein"];
 
 /**
  * References
@@ -52,17 +54,18 @@ $GLOBALS['TL_LANG']['tl_voucher_gift']['expired'] = "Expired";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['used'] = "Used";
 
 
-$GLOBALS['TL_LANG']['tl_voucher_gift']['0'] = "ارسال با موفقیت انجام شد ";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['1'] = "ام کاربر یا کلمه عبور نامعتبر می باشد ";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['2'] = "کاربر مسدود شده است ";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['0'] = "پیامک ارسال شد ";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['1'] = "خطای نام کاربری یا گذرواژه";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['2'] = "کاربر مسدود است ";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['3'] = "شماره فرستنده نامعتبر است";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['4'] = "محدودیت در ارسال روزانه";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['5'] = "تعداد گیرندگان حداکثر 100 شماره می باشد";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['6'] = "خط فرسنتده غیرفعال است";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['7'] = "متن پیامک شامل کلمات فیلتر شده است";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['8'] = "اعتبار کافی نیست ";
-$GLOBALS['TL_LANG']['tl_voucher_gift']['9'] = "سامانه در حال بروز رسانی می باشد ";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['9'] = "سامانه در حال بروزرسانی می باشد ";
 $GLOBALS['TL_LANG']['tl_voucher_gift']['10'] = "وب سرویس غیرفعال است";
+$GLOBALS['TL_LANG']['tl_voucher_gift']['99'] = "پیامک ارسال نشده است.";
 
 /**
  * Buttons

@@ -23,6 +23,8 @@ $GLOBALS['TL_LANG']['tl_voucher_staff']['note_legend'] = "Note";
  */
 $GLOBALS['TL_LANG']['tl_voucher_staff']['edit'] = ["Staff ID: %s bearbeiten", "Datensatz mit ID: %s bearbeiten"];
 $GLOBALS['TL_LANG']['tl_voucher_staff']['show'] = ["Staff ID: %s ansehen", "Datensatz mit ID: %s ansehen"];
+$GLOBALS['TL_LANG']['tl_voucher_staff']['new']  = ["New Staff", "Add new Staff"];
+
 
 /**
  * Fields

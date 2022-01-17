@@ -25,6 +25,7 @@ $GLOBALS['TL_LANG']['tl_voucher_card']['edit'] = ["Card mit ID: %s bearbeiten", 
 $GLOBALS['TL_LANG']['tl_voucher_card']['copy'] = ["Card mit ID: %s kopieren", "Card mit ID: %s kopieren"];
 $GLOBALS['TL_LANG']['tl_voucher_card']['delete'] = ["Card mit ID: %s löschen", "Card mit ID: %s löschen"];
 $GLOBALS['TL_LANG']['tl_voucher_card']['show'] = ["Card mit ID: %s ansehen", "Card mit ID: %s ansehen"];
+$GLOBALS['TL_LANG']['tl_voucher_card']['new'] = ["New Card", "Create New Card"];
 
 /**
  * Fields
